@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
-def process_image():
+def process_image(source,dest):
     # Load the image
-    img = cv2.imread('Data/Original/0/4000LUX_10cm_+15deg.png')
+    img = cv2.imread(source)
     # Create a clone of the image to draw on
     img_clone = img.copy()
 
@@ -67,9 +67,9 @@ def process_image():
         if cv2.waitKey(1) & 0xFF == 32:  # Press SPACE to save file
             if windowOpened: # When the image is showing
                 print('Saved')
-                cv2.imwrite('Data/Processed/test.png',imageSliced)
+                cv2.imwrite(dest,imageSliced)
         if cv2.waitKey(1) & 0xFF == 27:  # Press ESC to exit
             break
 
     cv2.destroyAllWindows()
-process_image()
+process_image('Data/Original/0/4000LUX_10cm_+15deg.png','Data/Processed/test.png')
