@@ -1,6 +1,10 @@
 import cv2
 import numpy as np
+import time
+import keyboard
+
 def process_image(source,dest):
+    
     # Load the image
     img = cv2.imread(source)
     # Create a clone of the image to draw on
@@ -10,6 +14,7 @@ def process_image(source,dest):
 
     # Initial point
     ix, iy = -1, -1
+    shift_x,shift_y=0,0
 
     # Initial switch
     sw=False
@@ -17,6 +22,37 @@ def process_image(source,dest):
 
     # Save cutted image
     imageSliced=None
+
+    # Image cutting by ratio
+    def image_ratio(ix,iy,x,y):
+        WIDTH=2
+        HEIGHT=3
+        new_x=x
+        new_y=y
+        current_x=x-ix
+        current_y=y-iy
+        if(current_y==0):
+            # division by zero
+            return new_x,new_y
+        if(abs(current_x/current_y)>WIDTH/HEIGHT):
+            # x is longer
+            if(current_x>0):
+                # new_x is bigger
+                new_x=ix+int(abs(current_y)*WIDTH/HEIGHT)
+            else:
+                # new_x is smaller
+                new_x=ix-int(abs(current_y)*WIDTH/HEIGHT)
+        else:
+            # y is longer
+            if(current_y>0):
+                # new_y is bigger
+                new_y=iy+int(abs(current_x)*HEIGHT/WIDTH)
+            else:
+                # new_y is smaller
+                new_y=iy-int(abs(current_x)*HEIGHT/WIDTH)
+        return new_x,new_y
+
+
 
     # Image cutting  function
     def slice_image(img, start, end):
@@ -32,11 +68,13 @@ def process_image(source,dest):
 
     # Mouse callback function
     def draw_rectangle(event, x, y, flags, param):
-        nonlocal ix, iy, img, img_clone,sw,windowOpened,imageSliced
+        nonlocal ix, iy, img, img_clone,sw,windowOpened,imageSliced,shift_x,shift_y
+        x+=shift_x
+        y+=shift_y
+        new_x,new_y=image_ratio(ix,iy,x,y)
         if event == cv2.EVENT_LBUTTONDOWN:
             if sw : 
-                print(f'({ix},{iy}),({x},{y}),width={abs(ix-x)},height={abs(iy-y)}')
-                imageSliced=slice_image(img_clone,[ix+1,iy+1],[x,y])
+                imageSliced=slice_image(img_clone,[ix+1,iy+1],[new_x,new_y])
                 cv2.imshow('example',imageSliced)
                 windowOpened=True
                 sw=False
@@ -49,7 +87,7 @@ def process_image(source,dest):
         elif event == cv2.EVENT_MOUSEMOVE:
             if ix != -1 and iy != -1:
                 img_clone = img.copy()
-                cv2.rectangle(img_clone, (ix, iy), (x, y), (255,255,0), 1)
+                cv2.rectangle(img_clone, (ix, iy), (new_x, new_y), (255,255,0), 1)
 
 
     # Set parameter to use [sw, windowOpened, sliced image]
@@ -59,17 +97,34 @@ def process_image(source,dest):
     param=[False,False,None]
 
     # Bind the function to window
-
+    
     cv2.setMouseCallback('image', draw_rectangle,param)
 
     while(1):
         cv2.imshow('image', img_clone)
-        if cv2.waitKey(1) & 0xFF == 32:  # Press SPACE to save file
+        cv2.waitKey(1)
+        if keyboard.is_pressed('space'):  # Press SPACE to save file
             if windowOpened: # When the image is showing
                 print('Saved')
                 cv2.imwrite(dest,imageSliced)
-        if cv2.waitKey(1) & 0xFF == 27:  # Press ESC to exit
+        if keyboard.is_pressed('esc'):  # Press ESC to exit
+            print('Exit!')
             break
 
+        # Reaction of arrow key pressed to move the image
+            # Not finished yet
+        # if keyboard.is_pressed('up'):
+        #     shift_y-=1
+        # if keyboard.is_pressed('down'):
+        #     shift_y+=1
+        # if keyboard.is_pressed('left'):
+        #     shift_x-=1
+        # if keyboard.is_pressed('right'):
+        #     shift_x+=1
+        # if keyboard.is_pressed('r'):
+        #     img_clone = img.copy()
+        #     shift_x,shift_y=0,0
+
+
     cv2.destroyAllWindows()
-process_image('Data/Original/0/4000LUX_10cm_+15deg.png','Data/Processed/test.png')
+#process_image('Data/Original/0/4000LUX_10cm_+15deg.png','Data/Processed/test.png')
