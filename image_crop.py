@@ -31,25 +31,37 @@ def process_image(source,dest):
         new_y=y
         current_x=x-ix
         current_y=y-iy
+        unit=0
+        # calculate the unit for the ratio
         if(current_y==0):
             # division by zero
             return new_x,new_y
         if(abs(current_x/current_y)>WIDTH/HEIGHT):
             # x is longer
-            if(current_x>0):
-                # new_x is bigger
-                new_x=ix+int(abs(current_y)*WIDTH/HEIGHT)
-            else:
-                # new_x is smaller
-                new_x=ix-int(abs(current_y)*WIDTH/HEIGHT)
+            unit=int(current_y/HEIGHT)
         else:
             # y is longer
-            if(current_y>0):
-                # new_y is bigger
-                new_y=iy+int(abs(current_x)*HEIGHT/WIDTH)
-            else:
-                # new_y is smaller
-                new_y=iy-int(abs(current_x)*HEIGHT/WIDTH)
+            unit=int(current_x/WIDTH)
+        unit=abs(unit)
+
+        # apply the unit to the new_x and new_y
+        if(current_x>0):
+            # new_x is bigger
+            new_x=ix+unit*WIDTH
+        else:
+            # new_x is smaller
+            new_x=ix-unit*WIDTH
+
+        if(current_y>0):
+            # new_y is bigger
+            new_y=iy+unit*HEIGHT
+        else:
+            # new_y is smaller
+            new_y=iy-unit*HEIGHT
+
+        # adjust the new_x and new_y
+        new_x-=1
+        new_y-=2
         return new_x,new_y
 
 
@@ -127,4 +139,4 @@ def process_image(source,dest):
 
 
     cv2.destroyAllWindows()
-#process_image('Data/Original/0/4000LUX_10cm_+15deg.png','Data/Processed/test.png')
+process_image('Data/Original/0/4000LUX_10cm_+15deg.png','Data/Processed/test.png')
