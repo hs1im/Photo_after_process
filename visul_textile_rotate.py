@@ -2,6 +2,7 @@
 
 # import functions
 import image_crop
+import file_checker
 
 # destinations
 sourceDest='Data/Original'
@@ -13,14 +14,40 @@ lux=['4000LUX']
 distance=['10cm','15cm','20cm','25cm','30cm','35cm','40cm']
 degree=['+45deg','+30deg','+15deg','0deg','-15deg','-30deg','-45deg']
 
-# bookmark
+# data not to be processed
+dataList=['1/4000LUX_20cm_-15deg.png',
+          '1/4000LUX_25cm_-15deg.png',
+          '1/4000LUX_30cm_+45deg.png',
+          '1/4000LUX_30cm_-30deg.png',
+          '1/4000LUX_35cm_+30deg.png',
+          '1/4000LUX_35cm_-30deg.png',
+          '1/4000LUX_40cm_-30deg.png',
+          '0/4000LUX_10cm_-45deg.png',
+          '0/4000LUX_25cm_-15deg.png',
+          '0/4000LUX_35cm_-15deg.png',
+          '2/4000LUX_15cm_+45deg.png',
+          '2/4000LUX_30cm_+30deg.png',
+          '3/4000LUX_10cm_+30deg.png',
+          '3/4000LUX_25cm_-30deg.png'
+        ]
+
+# switch of loop going not processed data
+dataNotProcessedSW=False
 
 
 # loop
-for i in numbers:
-    for j in lux:
-        for k in distance:
-            for l in degree:
-                source=sourceDest+'/'+i+'/'+j+'_'+k+'_'+l+'.png'
-                target=targetDest+'/'+i+'/'+j+'_'+k+'_'+l+'.png'
-                image_crop.process_image(source,target)
+if dataNotProcessedSW:
+    for i in dataList:
+        source=sourceDest+'/'+i
+        target=targetDest+'/'+i
+        image_crop.process_image(source,target)
+else:
+    for i in numbers:
+        for j in lux:
+            for k in distance:
+                for l in degree:
+                    source=sourceDest+'/'+i+'/'+j+'_'+k+'_'+l+'.png'
+                    target=targetDest+'/'+i+'/'+j+'_'+k+'_'+l+'.png'
+                    if source not in dataList:
+                        #image_crop.process_image(source,target)
+                        file_checker.file_check(target)
