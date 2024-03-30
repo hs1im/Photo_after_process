@@ -59,12 +59,18 @@ def process_image(source,dest):
             # new_y is smaller
             new_y=iy-unit*HEIGHT
 
-        # adjust the new_x and new_y
-        new_x-=1
-        new_y-=2
         return new_x,new_y
 
-
+    def image_position(ix,iy,x,y):
+        if(ix>x):
+            ms=ix
+            ix=x
+            x=ms
+        if(iy>y):
+            ms=iy
+            iy=y
+            y=ms
+        return ix,iy,x,y
 
     # Image cutting  function
     def slice_image(img, start, end):
@@ -85,8 +91,10 @@ def process_image(source,dest):
         y+=shift_y
         new_x,new_y=image_ratio(ix,iy,x,y)
         if event == cv2.EVENT_LBUTTONDOWN:
-            if sw : 
-                imageSliced=slice_image(img_clone,[ix+1,iy+1],[new_x,new_y])
+            if sw :
+                ix,iy,new_x,new_y=image_position(ix,iy,new_x,new_y)
+                # (+1,+1,-1,-2) is for remove the rectangle border and suit to ratio
+                imageSliced=slice_image(img_clone,[ix+1,iy+1],[new_x-1,new_y-2])
                 cv2.imshow('example',imageSliced)
                 windowOpened=True
                 sw=False
