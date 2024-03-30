@@ -24,9 +24,10 @@ def process_image(source,dest):
     imageSliced=None
 
     # Image cutting by ratio
+    WIDTH=2
+    HEIGHT=3
     def image_ratio(ix,iy,x,y):
-        WIDTH=2
-        HEIGHT=3
+        nonlocal WIDTH,HEIGHT
         new_x=x
         new_y=y
         current_x=x-ix
