@@ -3,13 +3,16 @@
 # import functions
 import image_crop
 import file_checker
+import image_sizeGet
+import keyboard
+import time
 
 # destinations
 sourceDest='Data/Original'
 targetDest='Data/Processed'
 
 # data to be processed
-numbers=['1','0','2','3','4','5','6','7','8','9']
+numbers=['0','1','2','3','4','5','6','7','8','9']
 lux=['4000LUX']
 distance=['10cm','15cm','20cm','25cm','30cm','35cm','40cm']
 degree=['+45deg','+30deg','+15deg','0deg','-15deg','-30deg','-45deg']
@@ -45,9 +48,10 @@ else:
     for i in numbers:
         for j in lux:
             for k in distance:
+                print(f'number:{i} {k}')
                 for l in degree:
-                    source=sourceDest+'/'+i+'/'+j+'_'+k+'_'+l+'.png'
+                    #source=sourceDest+'/'+i+'/'+j+'_'+k+'_'+l+'.png'
                     target=targetDest+'/'+i+'/'+j+'_'+k+'_'+l+'.png'
-                    if source not in dataList:
-                        #image_crop.process_image(source,target)
-                        file_checker.file_check(target)
+                    #image_crop.process_image(source,target)
+                    #file_checker.file_check(target)
+                    image_sizeGet.image_size_get_size(target,1)
