@@ -7,6 +7,11 @@ def process_image(source,dest):
     
     # Load the image
     img = cv2.imread(source)
+    # file not found
+    if img is None:
+        print(f'{source} not found')
+        return
+
     # Create a clone of the image to draw on
     img_clone = img.copy()
 
@@ -24,8 +29,9 @@ def process_image(source,dest):
     imageSliced=None
 
     # Image cutting by ratio
-    WIDTH=2
-    HEIGHT=3
+    WIDTH=1
+    HEIGHT=1
+
     def image_ratio(ix,iy,x,y):
         nonlocal WIDTH,HEIGHT
         new_x=x
@@ -95,7 +101,7 @@ def process_image(source,dest):
             if sw :
                 ix,iy,new_x,new_y=image_position(ix,iy,new_x,new_y)
                 # (+1,+1,-1,-2) is for remove the rectangle border and suit to ratio
-                imageSliced=slice_image(img_clone,[ix+1,iy+1],[new_x-1,new_y-2])
+                imageSliced=slice_image(img_clone,[ix+1,iy+1],[new_x-1,new_y-1])
                 cv2.imshow('example',imageSliced)
                 windowOpened=True
                 sw=False
@@ -148,4 +154,4 @@ def process_image(source,dest):
 
 
     cv2.destroyAllWindows()
-process_image('Data/Original/0/4000LUX_10cm_+15deg.png','Data/Processed/test.png')
+#process_image('Data/Original/0/10cm_+15deg.png','Data/Processed/test.png')
