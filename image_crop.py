@@ -92,6 +92,7 @@ def process_image(source,dest):
         return img[start[1]:end[1], start[0]:end[0]]
 
     # Mouse callback function
+    # click to start, click to end
     def draw_rectangle(event, x, y, flags, param):
         nonlocal ix, iy, img, img_clone,sw,windowOpened,imageSliced,shift_x,shift_y
         x+=shift_x
@@ -138,19 +139,7 @@ def process_image(source,dest):
             print('Exit!')
             break
 
-        # Reaction of arrow key pressed to move the image
-            # Not finished yet
-        # if keyboard.is_pressed('up'):
-        #     shift_y-=1
-        # if keyboard.is_pressed('down'):
-        #     shift_y+=1
-        # if keyboard.is_pressed('left'):
-        #     shift_x-=1
-        # if keyboard.is_pressed('right'):
-        #     shift_x+=1
-        # if keyboard.is_pressed('r'):
-        #     img_clone = img.copy()
-        #     shift_x,shift_y=0,0
+
 
 
     cv2.destroyAllWindows()
