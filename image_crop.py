@@ -97,10 +97,12 @@ def process_image(source,dest):
         nonlocal ix, iy, img, img_clone,sw,windowOpened,imageSliced,shift_x,shift_y
         x+=shift_x
         y+=shift_y
+        
         new_x,new_y=image_ratio(ix,iy,x,y)
         if event == cv2.EVENT_LBUTTONDOWN:
             if sw :
                 ix,iy,new_x,new_y=image_position(ix,iy,new_x,new_y)
+                
                 # (+1,+1,-1,-2) is for remove the rectangle border and suit to ratio
                 imageSliced=slice_image(img_clone,[ix+1,iy+1],[new_x-1,new_y-1])
                 cv2.imshow('example',imageSliced)
@@ -116,7 +118,8 @@ def process_image(source,dest):
             if ix != -1 and iy != -1:
                 img_clone = img.copy()
                 cv2.rectangle(img_clone, (ix, iy), (new_x, new_y), (255,255,0), 1)
-
+        # Add black dot for cursor
+        cv2.circle(img_clone, (x, y), 2, (0, 0, 0), -1)
 
     # Set parameter to use [sw, windowOpened, sliced image]
         # sw is switch of checking 'is it clicked?'
@@ -127,7 +130,7 @@ def process_image(source,dest):
     # Bind the function to window
     
     cv2.setMouseCallback('image', draw_rectangle,param)
-
+    saveSwitch=False
     while(1):
         cv2.imshow('image', img_clone)
         cv2.waitKey(1)
@@ -135,9 +138,13 @@ def process_image(source,dest):
             if windowOpened: # When the image is showing
                 print('Saved')
                 cv2.imwrite(dest,imageSliced)
+                saveSwitch=True
         if keyboard.is_pressed('esc'):  # Press ESC to exit
-            print('Exit!')
-            break
+            if saveSwitch:
+                print('Exit!')
+                break
+            else:
+                print('Save first!')
 
 
 

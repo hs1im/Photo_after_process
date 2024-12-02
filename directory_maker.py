@@ -1,7 +1,7 @@
 import os
 
 #target_directory="Data/Original"
-target_directory="Data/Processed"
+target_directory="Data/Processed/train"
 
 FileName=['1','2','3','4','5','6','7','8','9','0']
 for i in FileName:
