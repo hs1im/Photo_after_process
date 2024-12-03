@@ -26,7 +26,7 @@ for i in range(10):
     os.makedirs(targetDir + "/train/" + str(i), exist_ok=True)
 
 # Array size and number of each digit
-size = 1805
+size = 1083
 num_each_digit = size // 10 + 1
 
 # Generate two arrays
@@ -56,9 +56,9 @@ for i in range(size):
             exit(0)
 
 # Split the array into three parts
-distance=["0cm","10cm","20cm","30cm","40cm","50cm","60cm","70cm","80cm","90cm","100cm","110cm","120cm","130cm","140cm","150cm","160cm","170cm","180cm"]
+distance=["0cm","5cm","10cm","15cm","20cm","25cm","30cm","35cm","40cm","45cm","50cm","55cm","60cm","65cm","70cm","75cm","80cm","85cm","90cm"]
 angel=["-90deg","-80deg","-70deg","-60deg","-50deg","-40deg","-30deg","-20deg","-10deg","0deg","+10deg","+20deg","+30deg","+40deg","+50deg","+60deg","+70deg","+80deg","+90deg"]
-brighter=["brighter1","brighter2","original","darker1","darker2"]
+brighter=["LOW","MID","HIGH"]
 
 # split the array into three parts
 idx=0
